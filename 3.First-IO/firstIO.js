@@ -5,7 +5,7 @@ let fs = require('fs');
 // file location as second argument
 let filePath = process.argv[2];
 
-let fileReadBuffer = fs.readFileSync('./test_file.txt'); // readFileSync() returns Buffer
+let fileReadBuffer = fs.readFileSync('./test-file.txt'); // readFileSync() returns Buffer
 
 // let fileReadBuffer = fs.readFileSync(filePath);
 
