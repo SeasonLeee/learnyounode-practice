@@ -16,13 +16,13 @@ function filterFile(filePath, ext, callback) {
     const targetType = ext;
 
     fs.readdir(fb, (err, res) => {
-        if (err) callback(err);
+        if (err) return callback(err);
 
         let result = res.filter(e => path.extname(e) === '.' + targetType);
 
         // result.forEach(e => callback(e));
 
-        callback(null, result);
+        return callback(null, result);
     });
 
     // fs.readdir(fb, callback(err, res))
