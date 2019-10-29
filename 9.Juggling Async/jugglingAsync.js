@@ -1,12 +1,55 @@
-const url1 = process.argv[2];
-const url2 = process.argv[3];
-const url3 = process.argv[4];
+const urlArr = []
+
+for (let i = 2; i <= 4; i++) {
+    urlArr.push(process.argv[i]);
+}
 
 const http = require('http');
 
-function requestData(url) {
-    http.get(url, (res) => {
-        res.on('data', (data) => console.log(data));
-        res.on('end', () => {})
+/// The following are for my own test....
+// console.log('urlArr.length = ', urlArr.length);
+
+// for (let i = 0; i < urlArr.length; i++) {
+//     console.log('urlArr[i] = ', urlArr[i]);
+
+//     urlArr[i] = `http://jsonplaceholder.typicode.com/todos/${i + 1}`;
+
+//     console.log('urlArr[i] = ', urlArr[i]);
+// }
+
+/// The following are for first attempt of test the parallel stuff...
+/// or making the request one after another...
+/// well... I failed... not sure the reason why...
+/// but I managed to find out soon... soon... 😁
+// function requestData(urlArr) {
+//     return http.get(urlArr[0], (res) => {
+//         res.on('data', (data) => console.log(data.toString()));
+//         res.on('end', requestData(urlArr))
+//     })
+// }
+
+// requestData(urlArr[0]).end(
+//     requestData(urlArr[1]).end(
+//         requestData(urlArr[2])));
+
+let resOfUrl1 = '', resOfUrl2 = '', resOfUrl3 = '';
+
+http.get(urlArr[0], (res) => {
+    res.on('data', (data) => resOfUrl1 += data.toString());
+    res.on('end', () => {
+        console.log(resOfUrl1);
+        http.get(urlArr[1], (res2) => {
+            res2.on('data', (data) => resOfUrl2 += data.toString());
+            res2.on('end', () => {
+                console.log(resOfUrl2);
+                http.get(urlArr[2], (res) => {
+                    res.on('data', (data) => resOfUrl3 += data);
+                    res.on('end', () => {
+                        console.log(resOfUrl3);
+                        // console.log('DONE!');
+                    })
+                });
+            })
+        });
     })
-}
+});
